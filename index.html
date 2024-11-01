@@ -6,16 +6,63 @@
     <title>Real-Time Chat</title>
     <style>
         /* Tambahkan style sesuai kebutuhan Anda */
-        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f4f4f9; }
-        #chat-container { width: 300px; max-width: 100%; padding: 10px; border: 1px solid #ddd; background-color: white; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
-        #messages { height: 200px; overflow-y: auto; border: 1px solid #ddd; padding: 5px; background-color: #fafafa; margin-bottom: 10px; }
-        .message { margin: 5px 0; padding: 5px; border-radius: 4px; }
-        .user { background-color: #d1e7dd; }
-        .other { background-color: #f8d7da; }
-        #input-container { display: flex; }
-        #messageInput { flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px 0 0 4px; }
-        #sendBtn { padding: 8px; border: none; background-color: #4caf50; color: white; cursor: pointer; border-radius: 0 4px 4px 0; }
-        #sendBtn:hover { background-color: #45a049; }
+        body { 
+            font-family: Arial, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            background-color: #f4f4f9; 
+        }
+        #chat-container { 
+            width: 300px; 
+            max-width: 100%; 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            background-color: white; 
+            border-radius: 5px; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+        }
+        #messages { 
+            height: 200px; 
+            overflow-y: auto; 
+            border: 1px solid #ddd; 
+            padding: 5px; 
+            background-color: #fafafa; 
+            margin-bottom: 10px; 
+        }
+        .message { 
+            margin: 5px 0; 
+            padding: 5px; 
+            border-radius: 4px; 
+        }
+        .user { 
+            background-color: #d1e7dd; 
+        }
+        .other { 
+            background-color: #f8d7da; 
+        }
+        #input-container { 
+            display: flex; 
+        }
+        #messageInput { 
+            flex: 1; 
+            padding: 8px; 
+            border: 1px solid #ddd; 
+            border-radius: 4px 0 0 4px; 
+        }
+        #sendBtn { 
+            padding: 8px; 
+            border: none; 
+            background-color: #4caf50; 
+            color: white; 
+            cursor: pointer; 
+            border-radius: 0 4px 4px 0; 
+        }
+        #sendBtn:hover { 
+            background-color: #45a049; 
+        }
     </style>
     <!-- Tambahkan Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
@@ -56,7 +103,7 @@
             messageElem.classList.add("message", data.sender === "user" ? "user" : "other");
             messageElem.textContent = data.text;
             messagesDiv.appendChild(messageElem);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; // Scroll ke pesan terbaru
         }
 
         // Mendapatkan pesan dari Firebase dan menampilkannya
@@ -66,30 +113,30 @@
         });
 
         // Mengirim pesan ke Firebase
-function sendMessage() {
-    const text = messageInput.value.trim();
-    if (text) {
-        const message = {
-            text,
-            sender: "user",
-            timestamp: Date.now()
-        };
-        db.ref("messages").push(message)
-            .then(() => {
-                console.log("Pesan berhasil dikirim:", message);
-            })
-            .catch((error) => {
-                console.error("Error mengirim pesan:", error);
-            });
-        messageInput.value = "";
-    } else {
-        console.warn("Input pesan kosong!");
-    }
-}
+        function sendMessage() {
+            const text = messageInput.value.trim();
+            if (text) {
+                const message = {
+                    text,
+                    sender: "user",
+                    timestamp: Date.now()
+                };
+                db.ref("messages").push(message)
+                    .then(() => {
+                        console.log("Pesan berhasil dikirim:", message);
+                    })
+                    .catch((error) => {
+                        console.error("Error mengirim pesan:", error);
+                    });
+                messageInput.value = ""; // Mengosongkan input setelah mengirim pesan
+            } else {
+                console.warn("Input pesan kosong!");
+            }
+        }
 
         sendBtn.addEventListener("click", sendMessage);
         messageInput.addEventListener("keypress", function (e) {
-            if (e.key === "Enter") sendMessage();
+            if (e.key === "Enter") sendMessage(); // Kirim pesan dengan tombol Enter
         });
     </script>
 </body>
