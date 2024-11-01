@@ -99,13 +99,16 @@
 
         // Fungsi untuk menampilkan pesan
         function displayMessage(data) {
-            const messageElem = document.createElement("div");
-            messageElem.classList.add("message", data.sender === "user" ? "user" : "other");
-            messageElem.textContent = data.text;
-            messagesDiv.appendChild(messageElem);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight; // Scroll ke pesan terbaru
-        }
+    const messageElem = document.createElement("div");
+    messageElem.classList.add("message", data.sender === "user" ? "user" : "other");
+    messageElem.textContent = data.text;
 
+    // Menambahkan pesan baru di atas
+    messagesDiv.insertBefore(messageElem, messagesDiv.firstChild);
+    
+    // Scroll ke bawah untuk melihat pesan terbaru
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
         // Mendapatkan pesan dari Firebase dan menampilkannya
         db.ref("messages").on("child_added", (snapshot) => {
             const data = snapshot.val();
