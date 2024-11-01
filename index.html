@@ -3,9 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Pendaftaran Affiliate</title>
+    <title>Real-Time Chat</title>
+    <style>
+        /* Tambahkan style sesuai kebutuhan Anda */
+        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f4f4f9; }
+        #chat-container { width: 300px; max-width: 100%; padding: 10px; border: 1px solid #ddd; background-color: white; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        #messages { height: 200px; overflow-y: auto; border: 1px solid #ddd; padding: 5px; background-color: #fafafa; margin-bottom: 10px; }
+        .message { margin: 5px 0; padding: 5px; border-radius: 4px; }
+        .user { background-color: #d1e7dd; }
+        .other { background-color: #f8d7da; }
+        #input-container { display: flex; }
+        #messageInput { flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px 0 0 4px; }
+        #sendBtn { padding: 8px; border: none; background-color: #4caf50; color: white; cursor: pointer; border-radius: 0 4px 4px 0; }
+        #sendBtn:hover { background-color: #45a049; }
+    </style>
+    <!-- Tambahkan Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
 </head>
 <body>
-Kalem nya sabaran hela, ulh bertindak macem" komo kabur mah, bisi beuki nambahan mslh,, ken weh mslh dendam mah da aya allah nu langkung uninga, sabar weh hela,, abi nyaah k ayg moal ninggalkn ayg , abi karunya mrn ayena te aya nu ngadukung ayg, lnck lnck ge mrn te aya nu bisa di percaya ayenamah,, kalem weh masih aya abi asal nurut weh k abi ayenamh hela, ayenamah sabar hela nungguan tiis, komo ngaran ayg gs goreng di lnck mh mrn gs eweh nu peduli k ayg ge, kalem weh aya abi nu peduli nu nyaah, abi ge kecewa k lnck nu tdina di percaya bahkan tdina ngadukung, tpi gening tukangen mah beda dei,, mrn ayg te apal tpi abi mah apal, hampura nya gara" abi jdi kiye, jdi pnjng mslh na🙏🏻😥,, abi masih percaya k ayg, ulh ngecewakn abi siga lnck jg adi ayg nya😥,,wios weh ulah nga wa atau ngachat,abi sok sieun lain ayg nu nga wa teh,sok sieun nu mancing komo gs aya omongan selingkuh ti si nyai mah,jdi sok hati hati abi ge,asal ayg te di kasaran ddnya abi te hariwang teing,abi kalengitan pisan damel ge te fokus,wayahna sabaran weh hela ayenmh ulh macem" nya komo negtreg jg mancing wae emosi mah uh nya kde weh,wayahna pisan ayenmh sabaran hela,sing bager hela ddnya ulh macem🙏😊....meren ayenmh kiye hela cara abi ngobrol na,nu penting abi terang ayg te ku nnon weh,jg mrn kiye hela cara na ngobrol meh te kpanggih,,kecuali hp sok di jabeul mrn di selidiki🙏🏻🙏🏻
+    <div id="chat-container">
+        <div id="messages"></div>
+        <div id="input-container">
+            <input type="text" id="messageInput" placeholder="Type a message">
+            <button id="sendBtn">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Konfigurasi Firebase Anda
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            databaseURL: "https://console.firebase.google.com/u/0/project/chatting-secret/database/chatting-secret-default-rtdb/data/~2F?hl=id",
+            projectId: "chatting-secret",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "1029935653767",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Inisialisasi Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        const messagesDiv = document.getElementById("messages");
+        const messageInput = document.getElementById("messageInput");
+        const sendBtn = document.getElementById("sendBtn");
+
+        // Fungsi untuk menampilkan pesan
+        function displayMessage(data) {
+            const messageElem = document.createElement("div");
+            messageElem.classList.add("message", data.sender === "user" ? "user" : "other");
+            messageElem.textContent = data.text;
+            messagesDiv.appendChild(messageElem);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Mendapatkan pesan dari Firebase dan menampilkannya
+        db.ref("messages").on("child_added", (snapshot) => {
+            const data = snapshot.val();
+            displayMessage(data);
+        });
+
+        // Mengirim pesan ke Firebase
+        function sendMessage() {
+            const text = messageInput.value.trim();
+            if (text) {
+                const message = {
+                    text,
+                    sender: "user",
+                    timestamp: Date.now()
+                };
+                db.ref("messages").push(message);
+                messageInput.value = "";
+            }
+        }
+
+        sendBtn.addEventListener("click", sendMessage);
+        messageInput.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") sendMessage();
+        });
+    </script>
 </body>
 </html>
