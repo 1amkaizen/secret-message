@@ -66,18 +66,26 @@
         });
 
         // Mengirim pesan ke Firebase
-        function sendMessage() {
-            const text = messageInput.value.trim();
-            if (text) {
-                const message = {
-                    text,
-                    sender: "user",
-                    timestamp: Date.now()
-                };
-                db.ref("messages").push(message);
-                messageInput.value = "";
-            }
-        }
+function sendMessage() {
+    const text = messageInput.value.trim();
+    if (text) {
+        const message = {
+            text,
+            sender: "user",
+            timestamp: Date.now()
+        };
+        db.ref("messages").push(message)
+            .then(() => {
+                console.log("Pesan berhasil dikirim:", message);
+            })
+            .catch((error) => {
+                console.error("Error mengirim pesan:", error);
+            });
+        messageInput.value = "";
+    } else {
+        console.warn("Input pesan kosong!");
+    }
+}
 
         sendBtn.addEventListener("click", sendMessage);
         messageInput.addEventListener("keypress", function (e) {
